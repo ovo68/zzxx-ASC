@@ -1,0 +1,6 @@
+id,Sentence,Aspect Term,polarity,from,to
+2339,I charge it at night and skip taking the cord with me because of the good battery life.,cord,neutral,41,45
+2339,I charge it at night and skip taking the cord with me because of the good battery life.,battery life,positive,74,86
+1316,"The tech guy then said the service center does not do 1-to-1 exchange and I have to direct my concern to the ""sales"" team, which is the retail shop which I bought my netbook from.",service center,negative,27,41
+1316,"The tech guy then said the service center does not do 1-to-1 exchange and I have to direct my concern to the ""sales"" team, which is the retail shop which I bought my netbook from.","""sales"" team",negative,109,121
+1316,"The tech guy then said the service center does not do 1-to-1 exchange and I have to direct my concern to the ""sales"" team, which is the retail shop which I bought my netbook from.",tech guy,neutral,4,12
