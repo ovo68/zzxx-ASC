@@ -1,6 +1,7 @@
+import torch
 from pandas import read_csv
-from torch.utils.data import dataset
 from torch.utils.data import dataloader
+from torch.utils.data import dataset
 
 from model.EmbeddingLayer import EmbeddingLayer
 
@@ -53,7 +54,12 @@ class ZXinDataset(dataset.Dataset):
     def __getitem__(self, index):
         item = self.instances[index].x
         label = self.instances[index].label
-
+        if label == 0:
+            label = torch.tensor([0, 1, 0])
+        elif label == 1:
+            label = torch.tensor([0, 0, 1])
+        else:
+            label = torch.tensor([1, 0, 0])
         return item, label
 
     def __len__(self):
@@ -77,6 +83,10 @@ if __name__ == '__main__':
 
     net = EmbeddingLayer()
 
-    for item, label in train_loader:
-        lstm_output = net(item)
-        print(lstm_output.shape)
+    for data in train_loader:
+        item, label = data
+        print(item)
+        print(label)
+        print()
+        # lstm_output = net(item)
+        # print(lstm_output.shape)

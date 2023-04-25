@@ -1,6 +1,10 @@
 # IDE env
 .idea
 
+# other logs
+logs_train
+savemodel
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
