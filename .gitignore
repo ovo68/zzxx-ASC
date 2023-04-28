@@ -4,6 +4,7 @@
 # other logs
 logs_train
 savemodel
+data
 
 # Byte-compiled / optimized / DLL files
 __pycache__/

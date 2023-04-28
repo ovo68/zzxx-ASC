@@ -22,8 +22,8 @@ class EmbeddingLayer(nn.Module):
         # )
         self.dropout = nn.Dropout(0.3)
         self.lstm = nn.LSTM(
-            input_size=768,  # 1024
-            hidden_size=256,  # 1024
+            input_size=768,  #
+            hidden_size=256,  # 双向的LSTM，256*2
             batch_first=True,
             num_layers=2,
             dropout=0.5,  # 0.5
@@ -49,7 +49,8 @@ class EmbeddingLayer(nn.Module):
         """
             多句级处理[[],[],...[]]
         """
-        padded_sequence_ab = self.tokenizer(inputs, padding=True)
+        # padded_sequence_ab = self.tokenizer(inputs, padding=True)
+        padded_sequence_ab = self.tokenizer(inputs, max_length=80, padding='max_length')
 
         tokens_id_tensor = torch.tensor(padded_sequence_ab["input_ids"])
 

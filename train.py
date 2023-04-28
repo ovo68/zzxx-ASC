@@ -12,10 +12,10 @@ from utils import load_data
 # 定义训练的设备   gpu 适用对象   数据（非dataset）model  loss
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 instances = load_data()
-for i in instances:
-    print(i)
-
-print()
+# for i in instances:
+#     print(i)
+#
+# print()
 
 train_dataset = ZXinDataset(instances)
 
@@ -61,10 +61,11 @@ for i in range(epoch):
     # 训练步骤开始
     net.train()
     for data in train_dataloader:
-        item, label = data
+        item, label, dt = data
         # item = item.to(device)
         # targets = label.to(device)
-        outputs = net(item)
+        # adj_tensor = torch.randn(len(item), 80, 80)
+        outputs = net(item, dt)
         loss = loss_fn(outputs, label)
 
         # 优化器优化模型
