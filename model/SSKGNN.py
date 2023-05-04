@@ -8,6 +8,11 @@ class SSKModel(nn.Module):
     def __init__(self):
         super().__init__()
         self.embedding = EmbeddingLayer()
+        # TODO
+        """
+             1、固定数字都需要抽取为变量
+             2、这里只是句法依赖GCN，需要换一个语义化的变量名字
+        """
 
         self.gcn = GCN(512, 1024, 512, 0.5)
 
