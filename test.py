@@ -1,9 +1,9 @@
 import torch
 from torch.nn.parameter import Parameter
 
-weight = Parameter(torch.FloatTensor(2,6, 8))
-print(weight.shape)
-print(weight)
+# weight = Parameter(torch.FloatTensor(2,6, 8))
+# print(weight.shape)
+# print(weight)
 
 # bert = BertModel.from_pretrained('bert-base-cased', output_hidden_states=True)
 # tokenizer = BertTokenizer.from_pretrained('bert-base-cased')

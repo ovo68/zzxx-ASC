@@ -6,14 +6,20 @@ from torch.utils.data import dataset
 
 
 class Instance:
-    def __init__(self, no, sentence, aspect, polarity, dt, x, label) -> None:
+    def __init__(self, no, sentence, aspect, polarity, dt, kt, at, x, label) -> None:
         super().__init__()
         self.target = None
         self.no = no
         self.sentence = sentence
         self.aspect = aspect
         self.polarity = polarity
+        # 句法依赖矩阵
         self.dt = dt
+        # 常识知识矩阵
+        self.kt = kt
+        # 语义矩阵
+        self.at = at
+
         """
             x = ([CLS] s [SEP] a [SEP])
             x = (s [SEP] a)
@@ -23,7 +29,8 @@ class Instance:
 
     def __str__(self) -> str:
         return 'no:' + str(
-            self.no) + ',sentence=' + self.sentence + ', aspect=' + self.aspect + ',polarity=' + self.polarity + ',x=' + self.x
+            self.no) + ',sentence=' + self.sentence + \
+            ',aspect=' + self.aspect + ',polarity=' + self.polarity + ',x=' + self.x
 
 
 def load_data(path='demo.csv'):
@@ -35,12 +42,21 @@ def load_data(path='demo.csv'):
     origin_data_list = [origin_data[column_names[i]].tolist() for i in range(len(column_names))]
     for i in range(len(origin_data_list[0])):
         _, dt, _ = adj_dependency_tree(origin_data_list[1][i])
+
+        # TODO 常识知识矩阵构建
+        kt = torch.randn((80, 80), dtype=torch.float32)
+
+        # TODO 语义矩阵构建
+        at = torch.randn((80, 80), dtype=torch.float32)
+
         instances_train.append(Instance(
             origin_data_list[0][i],
             origin_data_list[1][i],
             origin_data_list[2][i],
             origin_data_list[3][i],
             torch.tensor(dt, dtype=torch.float32),
+            kt,
+            at,
             # '[CLS]' + origin_data_list[1][i] + '[SEP]' + origin_data_list[2][i] + '[SEP]',
             origin_data_list[1][i] + '[SEP]' + origin_data_list[2][i],
             label=0 if origin_data_list[3][i] == 'neutral' else 1 if origin_data_list[3][i] == 'positive' else -1
@@ -78,6 +94,13 @@ def adj_dependency_tree(arguments, max_length=80):
     return ze, DN, DSN
 
 
+def normalize(adj):
+    m = np.mean(adj)
+    mx = max(adj)
+    mn = min(adj)
+    return [(float(i) - m) / (mx - mn) for i in adj]
+
+
 class ZXinDataset(dataset.Dataset):
     def __init__(self, instances):
         super(ZXinDataset, self).__init__()
@@ -92,7 +115,7 @@ class ZXinDataset(dataset.Dataset):
             label = torch.tensor([0, 0, 1])
         else:
             label = torch.tensor([1, 0, 0])
-        return item, label, self.instances[index].dt
+        return item, label, self.instances[index].dt, self.instances[index].kt, self.instances[index].at
 
     def __len__(self):
         return len(self.instances)

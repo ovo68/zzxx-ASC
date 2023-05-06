@@ -61,11 +61,11 @@ for i in range(epoch):
     # 训练步骤开始
     net.train()
     for data in train_dataloader:
-        item, label, dt = data
+        item, label, dt, kt, at = data
         # item = item.to(device)
         # targets = label.to(device)
         # adj_tensor = torch.randn(len(item), 80, 80)
-        outputs = net(item, dt)
+        outputs = net(item, dt, kt, at)
         loss = loss_fn(outputs, label)
 
         # 优化器优化模型
