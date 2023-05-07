@@ -2,6 +2,7 @@ import numpy as np
 import spacy
 import torch
 from pandas import read_csv
+from senticnet.senticnet import SenticNet
 from torch.utils.data import dataset
 
 
@@ -16,7 +17,7 @@ class Instance:
         # 句法依赖矩阵
         self.dt = dt
         # 常识知识矩阵
-        self.kt = kt
+        self.kt = self.generate_kt()
         # 语义矩阵
         self.at = at
 
@@ -26,6 +27,25 @@ class Instance:
         """
         self.x = x
         self.label = label
+
+    def generate_kt(self):
+        token = self.sentence.split(' ')
+        common_matrix = torch.eye(80, 80)
+        for index, word in enumerate(token):
+            common_word = generate_single_word(word, self.polarity)
+            if len(common_word) == 0:
+                continue
+
+            for i in range(len(common_word)):
+                if (common_matrix[index, len(token) + i].item() == float(0)) & (
+                        common_matrix[len(token) + i, index].item() == float(0)):
+
+                    common_matrix[index, len(token) + i] = torch.tensor(1)
+                    common_matrix[len(token) + i, index] = torch.tensor(1)
+
+                else:
+                    continue
+        return common_matrix
 
     def __str__(self) -> str:
         return 'no:' + str(
@@ -92,6 +112,36 @@ def adj_dependency_tree(arguments, max_length=80):
     DSN = np.sqrt(D ** -1)
     DN = D ** -1
     return ze, DN, DSN
+
+
+def generate_single_word(word, polarity):
+    sn = SenticNet()
+    common_word = []
+    try:
+        concept_info = sn.concept(word)
+        polarity_label = concept_info['polarity_label']
+        polarity_value = concept_info['polarity_value']
+
+        if polarity == polarity_label:
+            moodtags = concept_info['moodtags']
+            semantics = concept_info['semantics']
+            common_word.extend(semantics)
+            common_word.extend(moodtags)
+        elif polarity == polarity_label:
+            moodtags = concept_info['moodtags']
+            semantics = concept_info['semantics']
+            common_word.extend(semantics)
+            common_word.extend(moodtags)
+        else:
+            return common_word
+
+
+    except:
+        return []
+
+        # print("before:", len(common_words))
+    common_word = list(set(common_word))
+    return common_word
 
 
 def normalize(adj):

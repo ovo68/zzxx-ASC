@@ -7,9 +7,9 @@ from torch.nn.modules.module import Module
 from torch.nn.parameter import Parameter
 
 
-class GCN(nn.Module):
+class GCNLayer(nn.Module):
     def __init__(self, n_feat, n_hid, n_out_hid, dropout):
-        super(GCN, self).__init__()
+        super(GCNLayer, self).__init__()
 
         self.gc1 = GraphConvolution(n_feat, n_hid)
         # TODO 将分类修改为通过 GCN 后输出的纬度

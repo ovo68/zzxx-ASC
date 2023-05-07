@@ -37,7 +37,7 @@ def testSN():
 #
 
 
-def generate_1(instance):
+def generate_single_instance(instance):
     # tokenizer = BertTokenizer.from_pretrained('bert-base-cased')
     #
     # token = tokenizer.tokenize(sentence)
@@ -61,15 +61,17 @@ def generate_1(instance):
                 continue
         print(word, index, '=>', common_word)
 
-    n = 0
-    for i in common_matrix.reshape(-1):
-        element = i.item()
-        if element == float(1):
-            n = n + 1
-        print('%.2f' % element, end=' ')
-    print('\n')
-    print(n)
-    print(common_matrix)
+    # n = 0
+    # for i in common_matrix.reshape(-1):
+    #     element = i.item()
+    #     if element == float(1):
+    #         n = n + 1
+    #     print('%.2f' % element, end=' ')
+    # print('\n')
+    # print(n)
+    # print(common_matrix)
+
+    return common_matrix
 
 
 def generate_single_word(word, polarity):
@@ -148,5 +150,5 @@ def generate_common_words(instances):
 
 
 if __name__ == '__main__':
-    generate_1(load_data()[1])
+    generate_single_instance(load_data()[1])
     # testSN()
